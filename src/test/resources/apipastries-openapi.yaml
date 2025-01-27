@@ -12,25 +12,65 @@ info:
     name: MIT License
     url: https://opensource.org/licenses/MIT
 paths:
+  /test:
+    get:
+      parameters:
+        - name: test
+          description: test
+          schema:
+            type: string
+          in: query
+          required: true
+          examples:
+            a:
+              value: 1
+            b:
+              value: 2
+        - name: test2
+          description: test2
+          schema:
+            type: string
+          in: query
+          required: true
+          examples:
+            a:
+              value: 1
+            b:
+              value: 2
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: string
+              examples:
+                a:
+                  value: 1
+                b:
+                  value: 2
+          description: Test operation
+      operationId: Test
+      summary: Test operation
+
   /pastries:
     summary: Global operations on pastries
     get:
       tags:
-      - pastry
-      parameters:
-      - name: size
-        description: pastry size
-        schema:
-          type: string
-        in: query
-        required: true
-        examples:
-          pastries_s:
-            value: S
-          pastries_m:
-            value: M
-          pastries_l:
-            value: L
+        - pastry
+#      parameters:
+#        - name: size
+#          description: pastry size
+#          schema:
+#            type: string
+#          in: query
+#          required: true
+#          examples:
+#            pastries_s:
+#              value: S
+#            pastries_m:
+#              value: M
+#            pastries_l:
+#              value: L
       responses:
         "200":
           content:
@@ -42,35 +82,35 @@ paths:
               examples:
                 pastries_s:
                   value:
-                  - name: Tartelette Fraise
-                    description: Delicieuse Tartelette aux Fraises fraiches
-                    size: S
-                    price: 2
-                    status: available
+                    - name: Tartelette Fraise
+                      description: Delicieuse Tartelette aux Fraises fraiches
+                      size: S
+                      price: 2
+                      status: available
                 pastries_m:
                   value:
-                  - name: Divorces
-                    description: Delicieux Divorces pas calorique du tout
-                    size: M
-                    price: 2.8
-                    status: available
-                  - name: Eclair Cafe
-                    description: Delicieux Eclair au Cafe pas calorique du tout
-                    size: M
-                    price: 2.5
-                    status: available
+                    - name: Divorces
+                      description: Delicieux Divorces pas calorique du tout
+                      size: M
+                      price: 2.8
+                      status: available
+                    - name: Eclair Cafe
+                      description: Delicieux Eclair au Cafe pas calorique du tout
+                      size: M
+                      price: 2.5
+                      status: available
                 pastries_l:
                   value:
-                  - name: Baba Rhum
-                    description: Delicieux Baba au Rhum pas calorique du tout
-                    size: L
-                    price: 3.2
-                    status: available
-                  - name: Millefeuille
-                    description: Delicieux Millefeuille pas calorique du tout
-                    size: L
-                    price: 4.4
-                    status: available
+                    - name: Baba Rhum
+                      description: Delicieux Baba au Rhum pas calorique du tout
+                      size: L
+                      price: 3.2
+                      status: available
+                    - name: Millefeuille
+                      description: Delicieux Millefeuille pas calorique du tout
+                      size: L
+                      price: 4.4
+                      status: available
           description: Get list of pastries by size
       operationId: GetPastriesBySize
       summary: Get list of pastries by size
@@ -78,17 +118,19 @@ paths:
     summary: Specific operation on pastry
     get:
       parameters:
-      - examples:
-          Eclair Cafe:
-            value: Eclair Cafe
-          Millefeuille:
-            value: Millefeuille
-        name: name
-        description: pastry name
-        schema:
-          type: string
-        in: path
-        required: true
+        - examples:
+            Eclair Cafe:
+              value: Eclair Cafe
+            Millefeuille:
+              value: Millefeuille
+            Missing Pastry:
+              value: Missing Pastry
+          name: name
+          description: pastry name
+          schema:
+            type: string
+          in: path
+          required: true
       responses:
         "200":
           content:
@@ -111,6 +153,21 @@ paths:
                     price: 4.4
                     status: available
           description: Pastry with specified name
+        404:
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                  message:
+                    type: string
+              examples:
+                Missing Pastry:
+                  value:
+                    code: 404
+                    message: Pastry not found
+          description: Pastry not found
       operationId: GetPastryByName
       summary: Get Pastry by name
       description: Get Pastry by name
@@ -124,17 +181,22 @@ paths:
               Eclair Cafe:
                 value:
                   price: 2.6
+              Eclair Super Cafe:
+                value:
+                  name: Eclair Super Cafe
         required: true
       parameters:
-      - examples:
-          Eclair Cafe:
-            value: Eclair Cafe
-        name: name
-        description: pastry name
-        schema:
-          type: string
-        in: path
-        required: true
+        - examples:
+            Eclair Cafe:
+              value: Eclair Cafe
+            Eclair Super Cafe:
+              value: Eclair Cafe
+          name: name
+          description: pastry name
+          schema:
+            type: string
+          in: path
+          required: true
       responses:
         "200":
           content:
@@ -149,16 +211,23 @@ paths:
                     size: M
                     price: 2.6
                     status: available
+                Eclair Super Cafe:
+                  value:
+                    name: Eclair Super Cafe
+                    description: Delicieux Eclair au Super Cafe pas calorique du tout
+                    size: M
+                    price: 2.6
+                    status: available
           description: Changed pastry
       operationId: PatchPastry
       summary: Patch existing pastry
     parameters:
-    - name: name
-      description: pastry name
-      schema:
-        type: string
-      in: path
-      required: true
+      - name: name
+        description: pastry name
+        schema:
+          type: string
+        in: path
+        required: true
 components:
   schemas:
     Pastry:
@@ -182,10 +251,10 @@ components:
           description: Status in stock (available, out_of_stock)
           type: string
       required:
-      - name
-      - price
-      - status
+        - name
+        - price
+        - status
       additionalProperties: false
 tags:
-- name: pastry
-  description: Pastry resource
+  - name: pastry
+    description: Pastry resource
